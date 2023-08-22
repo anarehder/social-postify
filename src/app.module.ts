@@ -6,8 +6,8 @@ import { PostsModule } from './posts/posts.module';
 import { PublicationsModule } from './publications/publications.module';
 
 @Module({
-  imports: [MediasModule, PostsModule, PublicationsModule],
   controllers: [AppController],
   providers: [AppService],
+  imports: [MediasModule, PostsModule, PublicationsModule],
 })
 export class AppModule {}

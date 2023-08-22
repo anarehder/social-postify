@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PublicationsController } from './publications.controller';
 import { PublicationsService } from './publications.service';
+import { PublicationsController } from './publications.controller';
 
 @Module({
   controllers: [PublicationsController],
