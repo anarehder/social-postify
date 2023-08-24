@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MediasService } from './medias.service';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
@@ -8,27 +16,27 @@ export class MediasController {
   constructor(private readonly mediasService: MediasService) {}
 
   @Post()
-  create(@Body() createMediaDto: CreateMediaDto) {
-    return this.mediasService.create(createMediaDto);
+  async create(@Body() body: CreateMediaDto) {
+    return await this.mediasService.createMedia(body);
   }
 
   @Get()
-  findAll() {
-    return this.mediasService.findAll();
+  async findAll() {
+    return await this.mediasService.findAllMedias();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mediasService.findOne(+id);
+  @Get('/:id')
+  async findOne(@Param('id') id: string) {
+    return await this.mediasService.findOneMedia(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMediaDto: UpdateMediaDto) {
-    return this.mediasService.update(+id, updateMediaDto);
+  @Patch('/:id')
+  async update(@Param('id') id: string, @Body() body: UpdateMediaDto) {
+    return await this.mediasService.updateMedia(+id, body);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mediasService.remove(+id);
+  @Delete('/:id')
+  async remove(@Param('id') id: string) {
+    return await this.mediasService.removeMedia(+id);
   }
 }
