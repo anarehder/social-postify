@@ -1,15 +1,23 @@
 import {
   ConflictException,
+  ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { MediasRepository } from './medias.repository';
+import { PublicationsService } from 'src/publications/publications.service';
 
 @Injectable()
 export class MediasService {
-  constructor(private readonly repository: MediasRepository) {}
+  constructor(
+    private readonly repository: MediasRepository,
+    @Inject(forwardRef(() => PublicationsService))
+    private publicationsService: PublicationsService,
+  ) {}
 
   async checkMedia(title: string, username: string) {
     const checkMedia = await this.repository.findMediaByUserandTitleDB(
@@ -60,7 +68,10 @@ export class MediasService {
 
   async removeMedia(id: number) {
     await this.checkId(id);
-    //conferir no publications se existe algum registro de media com esse id
+    const media = await this.publicationsService.findOnePublicationByMedia(id);
+    if (media) {
+      throw new ForbiddenException('Media attached with publication');
+    }
     return await this.repository.removeMediaDB(id);
   }
 }

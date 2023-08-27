@@ -1,11 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostsRepository } from './posts.repository';
+import { PublicationsService } from 'src/publications/publications.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly repository: PostsRepository) {}
+  constructor(
+    private readonly repository: PostsRepository,
+    @Inject(forwardRef(() => PublicationsService))
+    private publicationsService: PublicationsService,
+  ) {}
 
   async checkId(id: number) {
     const post = await this.repository.findOnePostDB(id);
@@ -39,7 +50,11 @@ export class PostsService {
 
   async removePost(id: number) {
     await this.checkId(id);
-    //conferir no publications se existe algum registro de media com esse id
+    const publication =
+      await this.publicationsService.findOnePublicationByPost(id);
+    if (publication) {
+      throw new ForbiddenException('Post attached with publication');
+    }
     return await this.repository.removePostDB(id);
   }
 }

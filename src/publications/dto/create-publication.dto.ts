@@ -1,4 +1,27 @@
-import { IsDate, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsString,
+  Validate,
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
+
+@ValidatorConstraint({ name: 'customDateFormat', async: false })
+export class CustomDateFormatValidator implements ValidatorConstraintInterface {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  validate(value: string, args: ValidationArguments) {
+    // Use uma expressão regular para verificar o formato da data
+    const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+    return regex.test(value);
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return `${args.property} deve estar no formato "YYYY-MM-DDTHH:mm:ss.SSSZ"`;
+  }
+}
 
 export class CreatePublicationDto {
   @IsNumber()
@@ -15,9 +38,10 @@ export class CreatePublicationDto {
   })
   postId: number;
 
-  @IsDate()
+  @IsString()
+  @Validate(CustomDateFormatValidator)
   @IsNotEmpty({
     message: 'All fields are required!',
   })
-  date: Date;
+  date: string;
 }

@@ -1,26 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
+import { PublicationsRepository } from './publications.repository';
+import { MediasService } from 'src/medias/medias.service';
+import { PostsService } from 'src/posts/posts.service';
 
 @Injectable()
 export class PublicationsService {
-  create(createPublicationDto: CreatePublicationDto) {
-    return 'This action adds a new publication';
+  constructor(
+    private readonly repository: PublicationsRepository,
+    @Inject(forwardRef(() => MediasService))
+    private mediasService: MediasService,
+    @Inject(forwardRef(() => PostsService))
+    private postsService: PostsService,
+  ) {}
+
+  async checkId(id: number) {
+    const publication = await this.repository.findOnePublicationDB(id);
+
+    if (!publication) {
+      throw new NotFoundException('Not found publication');
+    }
+    return publication;
   }
 
-  findAll() {
-    return `This action returns all publications`;
+  async createPublication(body: CreatePublicationDto) {
+    const { mediaId, postId } = body;
+    await this.mediasService.checkId(mediaId);
+    await this.postsService.checkId(postId);
+    return this.repository.createPublicationDB(body);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} publication`;
+  async findAllPublications(published?: string, after?: string) {
+    if (!published && !after) {
+      return await this.repository.findAllPublicationsDB();
+    }
+    if (published && !after) {
+      const today = new Date();
+      const todayFormatted = today.toISOString();
+      return await this.repository.findPublishedDB(published, todayFormatted);
+    }
+    if (published && after) {
+      const afterFormatted = `${after}T00:00:00.000Z`;
+      return await this.repository.findPublishedDB(published, afterFormatted);
+    }
+    return await this.repository.findAllPublicationsDB();
   }
 
-  update(id: number, updatePublicationDto: UpdatePublicationDto) {
-    return `This action updates a #${id} publication`;
+  async findOnePublicationByMedia(id: number) {
+    return await this.repository.findOnePublicationByMediaDB(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} publication`;
+  async findOnePublicationByPost(id: number) {
+    return await this.repository.findOnePublicationByPostDB(id);
+  }
+
+  async findOnePublication(id: number) {
+    const publication = await this.checkId(id);
+    return publication;
+  }
+
+  async updatePublication(id: number, body: UpdatePublicationDto) {
+    await this.checkId(id);
+    const { mediaId, postId } = body;
+    await this.mediasService.checkId(mediaId);
+    await this.postsService.checkId(postId);
+    return await this.repository.updatePublicationDB(id, body);
+  }
+
+  async removePublication(id: number) {
+    await this.checkId(id);
+    return await this.repository.removePublicationDB(id);
   }
 }
