@@ -1,15 +1,15 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { PublicationsService } from './publications.service';
 import { PublicationsController } from './publications.controller';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.service';
 import { PublicationsRepository } from './publications.repository';
-import { PostsModule } from 'src/posts/posts.module';
-import { MediasModule } from 'src/medias/medias.module';
-import { PrismaService } from 'nestjs-prisma';
-import { MediasService } from 'src/medias/medias.service';
-import { PostsService } from 'src/posts/posts.service';
-import { MediasRepository } from 'src/medias/medias.repository';
-import { PostsRepository } from 'src/posts/posts.repository';
+import { PostsModule } from '../posts/posts.module';
+import { MediasModule } from '../medias/medias.module';
+import { MediasService } from '../medias/medias.service';
+import { PostsService } from '../posts/posts.service';
+import { MediasRepository } from '../medias/medias.repository';
+import { PostsRepository } from '../posts/posts.repository';
 
 @Module({
   imports: [
