@@ -3,6 +3,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { TestHelper } from './helpers';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -17,7 +18,8 @@ describe('AppController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     prisma = await moduleFixture.resolve(PrismaService);
     await app.init();
-    await prisma.medias.deleteMany({});
+    const { cleanDB } = new TestHelper();
+    await cleanDB(prisma);
   });
 
   it('/ (GET)', () => {

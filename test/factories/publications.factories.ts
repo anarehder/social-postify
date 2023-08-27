@@ -11,7 +11,7 @@ export class PublicationFactories {
       data: {
         mediaId,
         postId,
-        date: faker.date.future(),
+        date: faker.date.future().toISOString(),
       },
     });
   }
@@ -25,7 +25,7 @@ export class PublicationFactories {
       data: {
         mediaId,
         postId,
-        date: faker.date.past(),
+        date: faker.date.past().toISOString(),
       },
     });
   }
