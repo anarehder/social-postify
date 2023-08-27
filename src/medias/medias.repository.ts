@@ -6,6 +6,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class MediasRepository {
   constructor(private readonly prisma: PrismaService) {}
+  findMediaByUserandTitleDB(title: string, username: string) {
+    return this.prisma.medias.findFirst({
+      where: { title, AND: { username } },
+    });
+  }
+
   createMediaDB(data: CreateMediaDto) {
     return this.prisma.medias.create({ data });
   }
@@ -15,7 +21,7 @@ export class MediasRepository {
   }
 
   findOneMediaDB(id: number) {
-    return this.prisma.medias.findUnique({
+    return this.prisma.medias.findFirst({
       where: { id },
     });
   }

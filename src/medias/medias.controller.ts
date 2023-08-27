@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { MediasService } from './medias.service';
 import { CreateMediaDto } from './dto/create-media.dto';
@@ -16,6 +18,7 @@ export class MediasController {
   constructor(private readonly mediasService: MediasService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() body: CreateMediaDto) {
     return await this.mediasService.createMedia(body);
   }
