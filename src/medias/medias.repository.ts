@@ -34,7 +34,6 @@ export class MediasRepository {
         username: body.username,
       },
     });
-    return `This action updates a #${id} media`;
   }
 
   removeMediaDB(id: number) {

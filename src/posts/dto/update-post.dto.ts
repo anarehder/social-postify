@@ -1,17 +1,23 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreatePostDto } from './create-post.dto';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class UpdatePostDto extends PartialType(CreatePostDto) {
   @IsString()
   @IsNotEmpty({
-    message: 'All fields are required!',
+    message: 'Title is required!',
   })
   title: string;
 
   @IsString()
   @IsNotEmpty({
-    message: 'All fields are required!',
+    message: 'Text is required!',
   })
   text: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  @IsUrl()
+  image: string;
 }
