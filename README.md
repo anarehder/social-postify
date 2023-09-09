@@ -1,7 +1,9 @@
 # Social Postify
 
 ## Descrição
-O "Social Postify" é um aplicativo web que permite aos usuários criar e agendar publicações para várias redes sociais, como Facebook, Instagram, Twitter e LinkedIn. Os usuários podem criar publicações personalizadas com imagens, títulos, texto e selecionar a data e horário específicos para cada publicação. O sistema suporta o agendamento de várias publicações e fornece uma visão geral clara das postagens programadas.
+O "Social Postify" é um aplicativo web que permite aos usuários criar e agendar publicações para várias redes sociais, como Facebook, Instagram, Twitter e LinkedIn.
+
+Os usuários podem criar publicações personalizadas com imagens, títulos, texto e selecionar a data e horário específicos para cada publicação. O sistema suporta o agendamento de várias publicações e fornece uma visão geral clara das postagens programadas.
 
 Este é um projeto em Nest.js. Segue abaixo as instruções de configuração:
 
@@ -51,8 +53,11 @@ As rotas disponíveis são:
   - publications
 
 Para todas as rotas possuímos POST, GET, PUT e DELETE.
+
 Na ausência de campos obrigatórios, retorne o status code 400 Bad Request.
+
 Se não houver nenhum registro compatível, retornar status code 404 Not Found.
+
 Se você tentar deletar algo que faça parte de uma publicação (agendada ou publicada). Neste caso, retornar o status code 403 Forbidden.
 
 As rotas disponíveis são:
@@ -63,6 +68,7 @@ As rotas disponíveis são:
   - DELETE/nomeDaRota/:id
 
 As medias representam as redes sociais nas quais as publicações (publications) serão feitas, por exemplo: Facebook, Instagram, Twitter, LinkedIn, Threads, etc.
+
 Para fazer ou editar uma media o body deve ter o formato:
 ```bash
   {
@@ -71,6 +77,7 @@ Para fazer ou editar uma media o body deve ter o formato:
   }
 ```
 Os posts representam os conteúdos que serão postados nas redes sociais (medias) por meio de uma publicação (publication):
+
 Para fazer ou editar um post o body deve ter o formato:
 ```bash
   {
@@ -79,6 +86,7 @@ Para fazer ou editar um post o body deve ter o formato:
   }
 ```
 As publicações são os agendamentos dos posts nas redes sociais (medias).
+
 Para fazer ou editar uma publicação o body deve ter o formato:
 ```bash
   {
