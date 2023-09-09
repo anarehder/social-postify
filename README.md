@@ -1,73 +1,103 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Social Postify
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrição
+O "Social Postify" é um aplicativo web que permite aos usuários criar e agendar publicações para várias redes sociais, como Facebook, Instagram, Twitter e LinkedIn. Os usuários podem criar publicações personalizadas com imagens, títulos, texto e selecionar a data e horário específicos para cada publicação. O sistema suporta o agendamento de várias publicações e fornece uma visão geral clara das postagens programadas.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este é um projeto em Nest.js. Segue abaixo as instruções de configuração:
 
-## Description
+Certifiquse-se de ter as seguintes ferramentas instaladas e atualizadas no seu sistema: 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
 
-## Installation
+
+## Instalação
+
+Siga estas etapas para configurar e executar o projeto localmente:
 
 ```bash
-$ npm install
+   git clone https://github.com/anarehder/social-postify.git
+   cd social-postify
 ```
 
-## Running the app
+### 1 - Instalar as dependencias
+```bash
+  npm install
+```
+### 2 - Configurar a variavel de ambiente
+
+Crie um arquivo .env na raiz do projeto com a variavel de ambiente necessária. Você pode usar o arquivo .env.example como um modelo.
+
+### 3 - Configurar o banco de dados com o Prisma
+
+Execute as seguintes etapas
+```bash
+  npx prisma generate
+  npx prisma migrate dev
+```
+
+### 4 - Execute o projeto em modo desenvolvimento
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  npm run start:dev
 ```
 
-## Test
+## 5 - Uso
+
+A porta utilizada padrão do Nest pe a porta 3000.
+As rotas disponíveis são:
+  - medias
+  - posts
+  - publications
+
+Para todas as rotas possuímos POST, GET, PUT e DELETE.
+Na ausência de campos obrigatórios, retorne o status code 400 Bad Request.
+Se não houver nenhum registro compatível, retornar status code 404 Not Found.
+Se você tentar deletar algo que faça parte de uma publicação (agendada ou publicada). Neste caso, retornar o status code 403 Forbidden.
+
+As rotas disponíveis são:
+  - POST/nomeDaRota
+  - GET/nomeDaRota
+  - GET/nomeDaRota/:id
+  - PUT/nomeDaRota/:id
+  - DELETE/nomeDaRota/:id
+
+As medias representam as redes sociais nas quais as publicações (publications) serão feitas, por exemplo: Facebook, Instagram, Twitter, LinkedIn, Threads, etc.
+Para fazer ou editar uma media o body deve ter o formato:
+```bash
+  {
+	"title": "Instagram",
+	"username": "myusername",
+  }
+```
+Os posts representam os conteúdos que serão postados nas redes sociais (medias) por meio de uma publicação (publication):
+Para fazer ou editar um post o body deve ter o formato:
+```bash
+  {
+	"title": "Why you should have a guinea pig?",
+	"text": "https://www.guineapigs.com/why-you-should-guinea",
+  }
+```
+As publicações são os agendamentos dos posts nas redes sociais (medias).
+Para fazer ou editar uma publicação o body deve ter o formato:
+```bash
+  {
+	"mediaId": 1,
+	"postId": 1,
+	"date": "2023-08-21T13:25:17.352Z"
+  }
+```
+
+## 6 - Testes
+Crie um arquivo .env.test de maneira análoga ao .env.example mas crie um banco secundário para testes.
+
+Para executá-los, use o comando 
+```bash
+  npm run test:e2e
+```
+
+### 7 - Para subir o projeto no modo de produção
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+  npm run build
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
