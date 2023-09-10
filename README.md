@@ -56,7 +56,7 @@ Execute as seguintes etapas
 
 ## 5 - Uso
 
-A porta utilizada padrão do Nest pe a porta 3000.
+A porta utilizada padrão do Nest é a porta 3000.
 
 ### As rotas disponíveis são:
   - medias
